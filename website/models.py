@@ -9,3 +9,4 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
     name = db.Column(db.String(150))
+    role = db.Column(db.String(80), nullable=False, default='student')
