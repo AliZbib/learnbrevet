@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
+from .models import User, Course
 from .init import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
@@ -64,5 +64,26 @@ def login():
 @views.route('/home')
 @login_required
 def home():
-    
+    if current_user.role == 'admin':
+        courses = Course.query.filter_by(owner=current_user).all()
+        return render_template('admin.html',user=current_user,courses=courses)
     return render_template('home.html',user=current_user)
+
+
+@views.route('/createcourse', methods=['GET', 'POST'])
+@login_required
+def createcourse():
+    if current_user.role != 'admin':
+        flash('You do not have permission to access this page.', category='error')
+        return redirect(url_for('views.home'))
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        description = request.form.get('description')
+
+        # Create a new course
+        new_course = Course(title=title, description=description, owner=current_user)
+        db.session.add(new_course)
+        db.session.commit()
+
+    return render_template('createcourse.html')

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Part 02</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='styles.css')}}">
+    <script src="{{url_for('static',filename='script.js')}}" defer></script>
+    <style>
+      .content section {
+        display: none;
+      }
+
+      .content section.active {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="sidebar-header">
+        <a class="logo-wrapper" href="/">
+          <img src="{{url_for('static',filename='logo.svg')}}" alt="Logo">
+          <h3 class="hidden">LearnBrevet</h3>
+        </a>
+        <button class="toggle-btn">
+          <img src="{{url_for('static',filename='expand.svg')}}" alt="expand button">
+        </button>
+      </div>
+
+      <div class="sidebar-links">
+        <a class="link active">
+          <img src="{{url_for('static',filename='home.svg')}}" alt="">
+          <span class="hidden">Home</span>
+        </a>
+        <a class="link">
+          <img src="{{url_for('static',filename='projects.svg')}}" alt="">
+          <span class="hidden">Projects</span>
+        </a>
+        <a class="link">
+          <img src="{{url_for('static',filename='dashboard.svg')}}" alt="">
+          <span class="hidden">Dashboard</span>
+        </a>
+        <a class="link">
+          <img src="{{url_for('static',filename='tasks.svg')}}" alt="">
+          <span class="hidden">Tasks</span>
+        </a>
+        <!-- Add more links as needed -->
+      </div>
+
+  
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-links">
+          <a class="link">
+            <img src="{{url_for('static',filename='settings.svg')}}" alt="">
+            <span class="hidden">Settings</span>
+          </a>
+        </div>
+
+        <div class="user-profile">
+          <div class="user-avatar">
+            <img src="{{url_for('static',filename='user.png')}}" alt="">
+          </div>
+          <div class="user-details hidden">
+            <p class="username">Jane Doe</p>
+            <p class="user-email">janedoe@gmail.com</p>
+          </div>
+        </div>
+      </div>
+    </nav>  
+    <div class="content" style="text-align: center;">
+        <section id="home">
+          <h2>Home</h2>
+          <!-- Add home content here -->
+        </section>
+        <section id="projects">
+          <h2>Projects</h2>
+          <!-- Add projects content here -->
+        </section>
+        <section id="dashboard">
+          <h2>Dashboard</h2>
+          <!-- Add dashboard content here -->
+        </section>
+        <section id="tasks">
+          <h2>Tasks</h2>
+          <!-- Add tasks content here -->
+        </section>
+        <!-- Add more sections as needed -->
+      </div>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const links = document.querySelectorAll('.sidebar-links a');
+          const sections = document.querySelectorAll('.content section');
+  
+          // Set the default content to be 'Home'
+          links[0].classList.add('active');
+          sections[0].classList.add('active');
+  
+          links.forEach((link, index) => {
+            link.addEventListener('click', function() {
+              // Remove 'active' class from all links and sections
+              links.forEach(l => l.classList.remove('active'));
+              sections.forEach(s => s.classList.remove('active'));
+  
+              // Add 'active' class to the clicked link and corresponding section
+              link.classList.add('active');
+              sections[index].classList.add('active');
+            });
+          });
+        });
+      </script>
+  </body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Homepage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff; /* Light background color */
+  font-family: "Ubuntu", sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  border: 0;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.navbar {
+  height: 90px;
+  background-color: #f4f4f6; /* Light background color */
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .logo img {
+  width: 3rem;
+  height: 3rem;
+  padding: 0.4rem;
+  border-radius: 0.5rem;
+  font-size: 20px;
+}
+
+.navbar .logo a {
+  font-size: 24px;
+  font-weight: 700;
+  color: #010101; /* Dark logo text color */
+  margin-left: 12px;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.menu-links {
+  display: flex;
+  gap: 24px;
+  border-right: 1px solid #999999;
+  padding-inline: 24px;
+}
+
+.menu-links a {
+  font-weight: 500;
+  color: #010101; /* Dark link text color */
+  padding: 8px 16px;
+}
+
+.menu-links a:hover {
+  color: #0aa5ff; /* Link text color on hover */
+}
+
+.log-in {
+  font-weight: 500;
+  padding: 12px 22px;
+  background-color: red; /* Button background color */
+  color: #ffffff; /* Button text color */
+  border-radius: 10px;
+  border: 2px solid red; /* Button border color */
+  transition: 0.2s;
+}
+
+.log-in:hover {
+  background-color: #ffffff; /* Button background color on hover */
+  color: #010101; /* Button text color on hover */
+}
+
+.menu-btn {
+  font-size: 32px;
+  color: #010101; /* Dark menu button color */
+  display: none;
+  cursor: pointer;
+}
+
+@media (max-width: 53rem) {
+  .menu {
+    display: none;
+  }
+
+  .menu-btn {
+    display: block;
+  }
+}
+.create-course {
+    font-weight: 500;
+    padding: 12px 22px;
+    background-color: #4caf50; /* Green button background color */
+    color: #ffffff; /* Button text color */
+    border-radius: 10px;
+    border: 2px solid #4caf50; /* Green button border color */
+    transition: 0.2s;
+  }
+
+.create-course:hover {
+    background-color: #ffffff; /* Button background color on hover */
+    color: #4caf50; /* Button text color on hover */
+}
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">
+        <img src="{{url_for('static',filename='logo.svg')}}" alt="Logo">
+        <a href="/">LearnBrevet</a>
+      </div>
+      <div class="menu">
+        <div class="menu-links">
+          <a href="/home">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/blog">Blog</a>
+        </div>
+        <a href="/logout"><button class="log-in">Log Out</button></a>
+        
+      </div>
+      <div class="menu-btn">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+    </nav>
+    <h1 style="text-align: center;">My Courses</h1>
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="{{url_for('views.createcourse')}}">
+        <button class="create-course">Create Course</button>
+      </a>
+    </div>
+    
+
+    <div class="container">
+      <div class="row">
+        {% for course in courses %}
+          <div class="col-md-6 mb-4">
+            <div class="card">
+              <img src="{{ course.image_url }}" class="card-img-top" alt="Course Image">
+              <div class="card-body">
+                <h5 class="card-title">{{ course.title }}</h5>
+                <p class="card-text">{{ course.description }}</p>
+                <p class="card-text"><small class="text-muted">Instructor: {{ course.instructor }}</small></p>
+                <p class="card-text text-blue-500 font-weight-bold">Price: ${{ course.price }}</p>
+                <a href="#" class="btn btn-primary">Enroll Now</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  <!-- Include Bootstrap JS and Popper.js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
