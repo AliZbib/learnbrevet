@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Course Info</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit general info of the course</h1>
+
+    <form action="{{ url_for('views.edittitle', course_id=course.id) }}" method="POST">
+        <label for="title">Title</label>
+        <input type="text" name="title">
+        <input type="submit" value="Submit">
+    </form>
+
+    <form action="{{ url_for('views.editdescription', course_id=course.id) }}" method="POST">
+        <label for="description">Description</label>
+        <input type="text" name="description">
+        <input type="submit" value="Submit">
+    </form>
+
+    <form action="{{ url_for('views.editduration', course_id=course.id) }}" method="POST">
+        <label for="duration">Duration</label>
+        <input type="text" name="duration">
+        <input type="submit" value="Submit">
+    </form>
+
+    <form action="{{ url_for('views.editlevel', course_id=course.id) }}" method="POST">
+        <label for="level">Level</label>
+        <input type="text" name="level">
+        <input type="submit" value="Submit">
+    </form>
+
+    <form action="{{ url_for('views.editlanguage', course_id=course.id) }}" method="POST">
+        <label for="lanaguag">Language</label>
+        <input type="text" name="lanaguag">
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

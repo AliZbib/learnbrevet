@@ -80,10 +80,82 @@ def createcourse():
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
+        image=request.form.get('image')
+        duration = request.form.get('duration')
+        level = request.form.get('level')
+        price = request.form.get('price')
+        language = request.form.get('language')
+        tags = request.form.get('tags')
 
         # Create a new course
-        new_course = Course(title=title, description=description, owner=current_user)
+        new_course = Course(
+            title=title,
+            description=description,
+            image=image,
+            duration=duration,
+            level=level,
+            price=price,
+            language=language,
+            tags=tags,
+            owner=current_user
+        )
+
         db.session.add(new_course)
         db.session.commit()
 
+        flash('Course created successfully!', category='success')
+        return redirect(url_for('views.home'))
+
     return render_template('createcourse.html')
+
+@views.route('/editcourse/<int:course_id>', methods=['GET', 'POST'])
+@login_required
+def editcourse(course_id):
+    course= Course.query.get(course_id)
+    return render_template('editcourse.html',course=course)
+
+
+# Edit Title Route
+@views.route('/edit_title/<int:course_id>', methods=['POST'])
+@login_required
+def edittitle(course_id):
+    course = Course.query.get(course_id)
+    course.title = request.form['title']
+    db.session.commit()
+    return redirect(url_for('editcourse', course_id=course.id))
+
+# Edit Description Route
+@views.route('/edit_description/<int:course_id>', methods=['POST'])
+@login_required
+def editdescription(course_id):
+    course = Course.query.get(course_id)
+    course.description = request.form['description']
+    db.session.commit()
+    return redirect(url_for('editcourse',course_id=course.id))
+
+# Edit Duration Route
+@views.route('/edit_duration/<int:course_id>', methods=['POST'])
+@login_required
+def editduration(course_id):
+    course = Course.query.get(course_id)
+    course.duration = int(request.form['duration'])
+    db.session.commit()
+    return redirect(url_for('editcourse',course_id=course_id))
+
+# Edit Level Route
+@views.route('/edit_level/<int:course_id>', methods=['POST'])
+@login_required
+def editlevel(course_id):
+    course = Course.query.get(course_id)
+    course.level = request.form['level']
+    db.session.commit()
+    return redirect(url_for('editcourse', course_id=course.id))
+
+# Edit Language Route
+@views.route('/edit_language/<int:course_id>', methods=['POST'])
+@login_required
+def editlanguage(course_id):
+    course = Course.query.get(course_id)
+    course.language = request.form['lanaguag']
+    db.session.commit()
+    return redirect(url_for('editcourse', course_id=course.id))

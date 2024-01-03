@@ -169,13 +169,16 @@ button {
         {% for course in courses %}
           <div class="col-md-6 mb-4">
             <div class="card">
-              <img src="{{ course.image_url }}" class="card-img-top" alt="Course Image">
+              <img src="{{ course.image }}" class="card-img-top" alt="Course Image">
               <div class="card-body">
                 <h5 class="card-title">{{ course.title }}</h5>
                 <p class="card-text">{{ course.description }}</p>
-                <p class="card-text"><small class="text-muted">Instructor: {{ course.instructor }}</small></p>
+                <p class="card-text">{{course.duration}} minutes</p>
+                <p class="card-text"><small class="text-muted">Level: {{ course.level }}</small></p>
+                <p class="card-text">{{course.lanaguag}}</p>
+                <p class="card-text"><small class="text-muted">Instructor: {{ course.owner.name }}</small></p>
                 <p class="card-text text-blue-500 font-weight-bold">Price: ${{ course.price }}</p>
-                <a href="#" class="btn btn-primary">Enroll Now</a>
+                <a href="{{ url_for('views.editcourse', course_id=course.id) }}" class="btn btn-primary">Edit Course</a>
               </div>
             </div>
           </div>
