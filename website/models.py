@@ -11,7 +11,10 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(150))
     role = db.Column(db.String(80), nullable=False, default='student')
     image = db.Column(db.String(255))
-
+    country = db.Column(db.String(80),nullable=False,default='interntional')
+    age=db.Column(db.Integer)
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
+    
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)
@@ -26,8 +29,7 @@ class Course(db.Model):
     tags = db.Column(db.String(100))
     documents = db.relationship('Document', backref='course', lazy=True)
     videos = db.relationship('Video', backref='course', lazy=True)
-    owner = db.relationship('User', backref=db.backref('courses', lazy=True))
-
+    owner = db.relationship('User', backref=db.backref('owned_courses', lazy=True))
 class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)

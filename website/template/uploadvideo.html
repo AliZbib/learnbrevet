@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Style for the video list */
+        .video-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 0;
+        }
+
+        /* Style for each video item */
+        .video-item {
+            width: calc(50% - 10px);
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Style for video titles */
+        .video-item h3 {
+            color: #333;
+            margin: 10px;
+        }
+
+        /* Style for video player */
+        .video-item video {
+            width: 100%;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" action="{{ url_for('views.addvideos', course_id=course.id) }}" enctype="multipart/form-data">
+        <h1>Upload Video for {{ course.title }}</h1>
+        <label for="title">Video Title:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="video">Select Video:</label>
+        <input type="file" id="video" name="video" accept=".mp4, .avi, .mkv" required>
+
+        <button type="submit">Upload Video</button>
+    </form>
+
+    <ul class="video-list">
+        {% for video in course.videos %}
+        <li class="video-item">
+            <h3>{{ video.title }}</h3>
+            <video width="320" height="240" controls>
+                <source src="{{ url_for('static', filename='uploads/videos/' ~ video.file_path) }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

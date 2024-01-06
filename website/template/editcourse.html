@@ -14,6 +14,12 @@
       .content section.active {
         display: block;
       }
+      .content-container {
+            max-width: 70%;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
     </style>
   </head>
   <body>
@@ -71,15 +77,22 @@
     </nav>  
     <div class="content" style="text-align: center;">
         <section id="home">
-          {%include 'editgeneral.html' %}
+          <div class="content-container">
+            {%include 'editgeneral.html' %}
+          </div>
+          
         </section>
         <section id="projects">
-          <h2>Projects</h2>
-          <!-- Add projects content here -->
+          <div class="content-container">
+            {%include 'uploadvideo.html' %}
+          </div>
+          
         </section>
         <section id="dashboard">
-          <h2>Dashboard</h2>
-          <!-- Add dashboard content here -->
+          <div class="content-container">
+            {%include 'adddocs.html' %}
+          </div>
+          
         </section>
         <section id="tasks">
           <h2>Tasks</h2>

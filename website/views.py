@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User, Course
+from .models import User, Course,Video, Document
 from .init import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
+import os
 
 views = Blueprint('views', __name__)
 
@@ -14,6 +15,8 @@ def index():
 
 @views.route('/signup', methods=['GET', 'POST'])
 def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('views.home'))
     if request.method == 'POST':
         email = request.form.get('email')
         name = request.form.get('name')
@@ -43,6 +46,8 @@ def logout():
 
 @views.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('views.home'))
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -87,7 +92,7 @@ def createcourse():
         language = request.form.get('language')
         tags = request.form.get('tags')
 
-        # Create a new course
+        
         new_course = Course(
             title=title,
             description=description,
@@ -122,7 +127,7 @@ def edittitle(course_id):
     course = Course.query.get(course_id)
     course.title = request.form['title']
     db.session.commit()
-    return redirect(url_for('editcourse', course_id=course.id))
+    return redirect(url_for('views.editcourse', course_id=course.id))
 
 # Edit Description Route
 @views.route('/edit_description/<int:course_id>', methods=['POST'])
@@ -131,7 +136,7 @@ def editdescription(course_id):
     course = Course.query.get(course_id)
     course.description = request.form['description']
     db.session.commit()
-    return redirect(url_for('editcourse',course_id=course.id))
+    return redirect(url_for('views.editcourse',course_id=course.id))
 
 # Edit Duration Route
 @views.route('/edit_duration/<int:course_id>', methods=['POST'])
@@ -140,7 +145,7 @@ def editduration(course_id):
     course = Course.query.get(course_id)
     course.duration = int(request.form['duration'])
     db.session.commit()
-    return redirect(url_for('editcourse',course_id=course_id))
+    return redirect(url_for('views.editcourse',course_id=course.id))
 
 # Edit Level Route
 @views.route('/edit_level/<int:course_id>', methods=['POST'])
@@ -149,7 +154,7 @@ def editlevel(course_id):
     course = Course.query.get(course_id)
     course.level = request.form['level']
     db.session.commit()
-    return redirect(url_for('editcourse', course_id=course.id))
+    return redirect(url_for('views.editcourse', course_id=course.id))
 
 # Edit Language Route
 @views.route('/edit_language/<int:course_id>', methods=['POST'])
@@ -158,4 +163,46 @@ def editlanguage(course_id):
     course = Course.query.get(course_id)
     course.language = request.form['lanaguag']
     db.session.commit()
-    return redirect(url_for('editcourse', course_id=course.id))
+    return redirect(url_for('views.editcourse', course_id=course.id))
+
+@views.route('/addvideos/<int:course_id>', methods=['GET', 'POST'])
+@login_required
+def addvideos(course_id):
+    if current_user.role != 'admin':
+        flash('You do not have permission to upload this please login as a teacher')
+        return redirect('/home')
+    if request.method == 'POST':
+        f = request.files['video']
+        if f:
+            #MANUALLY SPECIFY THE UPLOAD FOLDER
+            upload_folder = os.path.join(os.getcwd(),'website', 'static', 'uploads', 'videos')
+            os.makedirs(upload_folder, exist_ok=True)
+            file_path = os.path.join(upload_folder, f.filename)
+            #Save the file to the uploads folder
+            f.save(file_path)
+            video = Video(title=request.form['title'], file_path=f.filename, course_id=course_id)
+            db.session.add(video)
+            db.session.commit()
+    course = Course.query.filter_by(id=course_id).first()
+    
+    return redirect(url_for('views.editcourse', course_id=course.id))
+@views.route('/adddocs/<int:course_id>', methods=['GET', 'POST'])
+@login_required
+def adddocs(course_id):
+    if current_user.role != 'admin':
+        return redirect('/home')
+    if request.method == 'POST':
+        f = request.files['document']
+        if f:
+            #MANUALLY SPECIFY THE UPLOAD FOLDER
+            upload_folder = os.path.join(os.getcwd(),'website','static', 'uploads', 'documents')
+            os.makedirs(upload_folder, exist_ok=True)
+            file_path = os.path.join(upload_folder, f.filename)
+            #Save the file to the uploads folder
+            f.save(file_path)
+            doc = Document(title=request.form['title'], file_path=f.filename, course_id=course_id)
+            db.session.add(doc)
+            db.session.commit()
+    course =Course.query.filter_by(id=course_id).first()
+    
+    return redirect(url_for('views.editcourse', course_id=course.id))
